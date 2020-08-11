@@ -1,0 +1,70 @@
+<nav class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" id="sidenav-main"
+    (mouseover)="onMouseEnterSidenav()" (mouseout)="onMouseLeaveSidenav()">
+    <perfect-scrollbar>
+        <div class="scrollbar-inner">
+            <div class="sidenav-header d-flex align-items-center">
+                <a class="navbar-brand" [routerLink]="['/dashboards/dashboard']">
+                    <img src="assets/img/logo_sports.png" class="navbar-brand-img" alt="..." />
+                </a>
+                <div class="ml-auto">
+                    <!-- Sidenav toggler -->
+                    <div class="sidenav-toggler d-none d-xl-block" data-action="sidenav-unpin"
+                        data-target="#sidenav-main" (click)="minimizeSidebar()">
+                        <div class="sidenav-toggler-inner">
+                            <i class="sidenav-toggler-line"></i>
+                            <i class="sidenav-toggler-line"></i>
+                            <i class="sidenav-toggler-line"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar-inner">
+                <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+                    <!-- Collapse header -->
+                    <ul class="navbar-nav">
+                        <li *ngFor="let menuitem of menuItems | async" class="nav-item">
+                            <!--If is a single link-->
+                            <a routerLinkActive="active" [routerLink]="[menuitem.path]" *ngIf="!menuitem.children"
+                                class="nav-link">
+                                <i class="ni {{ menuitem.icon }}"></i>
+                                <span class="nav-link-text">{{ menuitem.title }}</span>
+                            </a>
+                            <!--If it have a submenu-->
+                            <a data-toggle="collapse" routerLinkActive="active"
+                                *ngIf="menuitem.children && menuitem.children.length > 0"
+                                (click)="menuitem.isCollapsed = !menuitem.isCollapsed"
+                                [attr.aria-expanded]="!menuitem.isCollapsed" 
+                                [attr.aria-controls]="menuitem.collapse"
+                                class="nav-link">
+                                <i class="ni {{ menuitem.icon }}"></i>
+                                <span class="nav-link-text">{{ menuitem.title }}</span>
+                            </a>
+                            <!--Display the submenu items-->
+                            <div id="{{ menuitem.collapse }}" class="collapse" 
+                                *ngIf="menuitem.children && menuitem.children.length > 0"
+                                [collapse]="menuitem.isCollapsed" 
+                                [isAnimated]="true">
+                                <ul class="nav nav-sm flex-column">
+                                    <li *ngFor="let childitem of menuitem.children" class="nav-item">
+                                        <!--If is a single link-->
+                                        <a routerLinkActive="active" 
+                                            [routerLink]="[menuitem.path, childitem.path]"
+                                            class="nav-link" *ngIf="(!menuitem.children ? 'sub' : 'link' )" 
+                                            style="padding-left: 4rem;">
+                                            {{ childitem.title }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+    <button (click)="clickTest()" >test</button>
+    <p *ngFor="let item of lst" id="pTest" >
+        {{item.icon}}
+    </p>
+</nav>
